@@ -1,12 +1,49 @@
 import './styles.css'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Header } from './modules'
+import { getMedias } from './api/';
+import Movie from './components/Movie';
 
 export default function App() {
-  return (
-    <>
-      <Header />
-      <main>{/** code */}</main>
-    </>
-  )
+  const [movies, setMovies] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+  console.log('movies: ',movies);
+  console.log('isLoaded: ', isLoaded);
+  console.log('error: ', error);
+
+  useEffect(() => {
+    getMedias()
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setMovies(result);
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      )
+      .catch(console.error);
+  }, []);
+  
+  
+  if (error) {
+    return <div>Error: {error.message}</div>
+  } else if(!isLoaded) {
+    return <div>Loading...</div>
+  } else {
+    return (
+      <>
+        <Header />
+        <main> 
+          <section className="movie-cards">
+            {movies.map(movie => (
+              <Movie key={movie.id} {...movie} />
+            ))}
+          </section>
+        </main>
+      </>
+    )
+  }
 }

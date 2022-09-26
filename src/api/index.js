@@ -3,6 +3,7 @@ import { mock } from './mock'
 export const getMedias = () => {
   return new Promise((resolve, _) => {
     setTimeout(() => {
+      console.log(resolve(mock))
       resolve(mock)
     }, 300)
   })
