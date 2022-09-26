@@ -3,7 +3,6 @@ import { mock } from './mock'
 export const getMedias = () => {
   return new Promise((resolve, _) => {
     setTimeout(() => {
-      console.log(resolve(mock))
       resolve(mock)
     }, 300)
   })
@@ -14,8 +13,10 @@ export const addToWatchlist = (id) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (success) {
+        console.log('successful')
         resolve({ message: `Added media ${id}`, status: 200 })
       } else {
+        console.log('rejeceted')
         reject({ message: `Error ${id}`, status: 422 })
       }
     }, 300)

@@ -9,8 +9,6 @@ export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   console.log('movies: ',movies);
-  console.log('isLoaded: ', isLoaded);
-  console.log('error: ', error);
 
   useEffect(() => {
     getMedias()
@@ -24,7 +22,6 @@ export default function App() {
           setError(error);
         }
       )
-      .catch(console.error);
   }, []);
   
   

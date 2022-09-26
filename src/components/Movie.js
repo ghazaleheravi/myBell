@@ -1,7 +1,7 @@
 import React from 'react';
 import WatchList  from './WatchList';
 
-const Movie = ({ image, title }) => {
+const Movie = ({ image, title, id }) => {
   return (
     <div className="movie-card">
       <ul className="movie-ul">
@@ -17,7 +17,7 @@ const Movie = ({ image, title }) => {
                (min-width: 1500px) 16vw"
           />
           <p className="title">{title}</p>
-          <WatchList />
+          <WatchList id={id} title={title} />
         </li>
       </ul>
     </div>
