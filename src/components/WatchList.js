@@ -1,43 +1,46 @@
-import React, { useState, useContext } from "react";
+/*import React, { useState } from "react";
 import { addToWatchlist } from "../api";
 import { removeFromWatchlist } from "../api";
 
 const WatchList = ({ id, title }) => {
+  
   const [isAdded, setAdded] = useState(false);
-  const [isRemoved, setRemoved] = useState(true);
   const [error, setError] = useState(null);
   const [watchList, setWatchList] = useState({});
-  console.log('watchList: ', watchList);
+  console.log('watchlist: ', watchList);
 
-  
-  const handleAddClick = (e) => {
+  const handleClick = (e) => {
+    //console.log(localStorage.getItem(`${title}`))
+    if (localStorage.getItem(id) !== null) {
+      removeFromWatchlist({id})
+        .then(
+          (result) => {
+            if (result.status === 200) {
+              localStorage.removeItem(id);
+              setAdded(false);
+            }
+        })
+    } else {
     addToWatchlist({id})
       .then(
-        (value) => { 
-          if(value.status === 200) {
-            setWatchList({...watchList, title});
+        (result) => { 
+          if(result.status === 200) {
+            localStorage.setItem(id, title);
             setAdded(true);
-            setRemoved(false);
+            setWatchList({...watchList, [id]: title});
           } else if (value.status === 422) {
             (error) => setError(error);
           }
       })
+    }
   }
 
-  const handleRemoveClick = (e) => {
-    setRemoved(true);
-    setAdded(false);
-    removeFromWatchlist({id})
-      .then(
-
-      )
-  }
-
-  if (!isAdded) {
-    return <button onClick={handleAddClick}>(+) Add to watchlist</button>;
-  } else {
-    return <button onClick={handleRemoveClick}>(-) Remove from watchlist</button>
-  }
+  return (
+    <button onClick={handleClick} className="add-remove-btn">
+      {watchList[id] ? '(-) Remove from watchlist' : '(+) Add to watchlist'}
+    </button> 
+  )
+  
 }
 
-export default WatchList;
+export default WatchList;*/

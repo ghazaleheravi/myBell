@@ -1,7 +1,35 @@
-import React from 'react';
-import WatchList  from './WatchList';
+import React, { useState } from 'react';
+import { addToWatchlist } from "../api";
+import { removeFromWatchlist } from "../api";
 
-const Movie = ({ image, title, id }) => {
+const Movie = ({ image, title, id, addToWatchList, removeFromWatchList, toggleButtonContext }) => {
+  const [error, setError] = useState(null);
+  
+  const handleClick = (e) => {
+    //console.log(localStorage.getItem(`${title}`))
+    if (localStorage.getItem(id) !== null) {
+      removeFromWatchlist({id})
+        .then(
+          (result) => {
+            if (result.status === 200) {
+              localStorage.removeItem(id);
+              removeFromWatchList(id);
+            }
+        })
+    } else {
+    addToWatchlist({id})
+      .then(
+        (result) => { 
+          if(result.status === 200) {
+            localStorage.setItem(id, title);
+            addToWatchList(id, title);
+          } else if (value.status === 422) {
+            (error) => setError(error);
+          }
+      })
+    }
+  }
+ 
   return (
     <div className="movie-card">
       <ul className="movie-ul">
@@ -17,7 +45,9 @@ const Movie = ({ image, title, id }) => {
                (min-width: 1500px) 16vw"
           />
           <p className="title">{title}</p>
-          <WatchList id={id} title={title} />
+          <button onClick={handleClick} className="add-remove-btn">
+            {(toggleButtonContext(id)) ? '(-) Remove from watchlist' : '(+) Add to watchlist'}
+          </button> 
         </li>
       </ul>
     </div>

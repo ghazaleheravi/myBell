@@ -38,4 +38,14 @@ header {
 .title {
   margin: 5px auto 5px auto;
   font-size: 16px;
+  height: 36px;
+}
+
+.add-remove-btn {
+  font-size: 18px;
+  border: none;
+}
+
+.add-remove-btn:hover {
+  cursor: pointer;
 }

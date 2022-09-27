@@ -4,10 +4,30 @@ import { Header } from './modules'
 import { getMedias } from './api/';
 import Movie from './components/Movie';
 
+
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
+
+  const [watchList, setWatchList] = useState({});
+
+
+  console.log('watchList: ', watchList);
+
+  function addToWatchList(id, title) {
+    setWatchList({...watchList, [id]: title})
+  }
+
+  function removeFromWatchList(id) {
+    delete watchList[id];
+  }
+
+  function toggleButtonContext(id) {
+    let isAdded = watchList[id] ? true : false;
+    return isAdded;
+  }
+
   console.log('movies: ',movies);
 
   useEffect(() => {
@@ -24,7 +44,8 @@ export default function App() {
       )
   }, []);
   
-  
+ 
+
   if (error) {
     return <div>Error: {error.message}</div>
   } else if(!isLoaded) {
@@ -36,7 +57,12 @@ export default function App() {
         <main> 
           <section className="movie-cards">
             {movies.map(movie => (
-              <Movie key={movie.id} {...movie} />
+              <Movie key={movie.id} 
+                {...movie} 
+                addToWatchList={addToWatchList}
+                removeFromWatchList={removeFromWatchList}
+                toggleButtonContext={toggleButtonContext}
+              />
             ))}
           </section>
         </main>
