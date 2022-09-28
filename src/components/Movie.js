@@ -16,7 +16,7 @@ const Movie = ({ image, title, id, toggleAddToWatchlist, isInWatchlist }) => {
       />
       <p className="title">{title}</p>
       <button onClick={() => toggleAddToWatchlist({ id, title, image }, isInWatchlist)} className='add-remove-btn'>
-        {isInWatchlist ? '(-) Remove from watchlist': '(+) Add to watchlist'}
+        {isInWatchlist ? '- Remove from watchlist': '+ Add to watchlist'}
       </button>
     
     </div>
