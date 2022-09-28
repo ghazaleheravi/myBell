@@ -10,16 +10,14 @@ export default function App() {
   const [error, setError] = useState(null);
   
   const [watchlist, setWatchlist] = useState({});
-  console.log('watchlist: ',watchlist)
-  console.log('!!watchlist: ',!!watchlist[movies.id])
-
+  
   const toggleAddToWatchlist = async (movie, isAdded) => {
     if (!isAdded) {
       const result = await addToWatchlist({ id: movie.id })
       if (result.status === 422) {
         return setError(new Error("fail"));
       } 
-      localStorage.setItem([movie.id], movie.title);
+      localStorage.setItem(movie.id, movie.title);
       setWatchlist({ ...watchlist, [movie.id]: movie.title })
     } 
     else {
@@ -35,12 +33,10 @@ export default function App() {
   }
   
   useEffect(() => {
-    let retrievedWatchlist = {};
-    let ids = Object.keys(localStorage);
-    ids.forEach(id => {
-      let title = localStorage.getItem(id);
-      retrievedWatchlist = { ...retrievedWatchlist, [id]: title };
-    }); 
+    const retrievedWatchlist = Object.keys(localStorage).reduce((acc, cur) => {
+      acc[cur] = localStorage.getItem(cur);
+      return acc
+    }, {});
     setWatchlist(retrievedWatchlist);
 
     getMedias()

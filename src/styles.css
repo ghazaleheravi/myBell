@@ -28,7 +28,7 @@ header {
 }
 
 .title {
-  margin: 5px auto 5px auto;
+  margin: 7px auto 7px auto;
   font-size: 16px;
   height: 36px;
 }
@@ -40,6 +40,7 @@ header {
 
 .add-remove-btn:hover {
   cursor: pointer;
+  color: rgb(0, 193, 243);
 }
 
 .loading {
@@ -47,4 +48,12 @@ header {
   top: 50%;
   left:50%;
   transform: translate(-50%, -50%);
+}
+
+.movie-card {
+  transition: 0.3s ease-in-out;
+}
+
+.movie-card:hover {
+  transform: scale(1.04);
 }
