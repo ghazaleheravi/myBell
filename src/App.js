@@ -1,36 +1,48 @@
 import './styles.css'
 import React, { useState, useEffect } from 'react'
 import { Header } from './modules'
-import { getMedias } from './api/';
-import Movie from './components/Movie';
-
+import { getMedias, addToWatchlist, removeFromWatchlist } from './api/';
+import  Movie  from './components/Movie';
 
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
+  
+  const [watchlist, setWatchlist] = useState({});
+  console.log('watchlist: ',watchlist)
+  console.log('!!watchlist: ',!!watchlist[movies.id])
 
-  const [watchList, setWatchList] = useState({});
-
-
-  console.log('watchList: ', watchList);
-
-  function addToWatchList(id, title) {
-    setWatchList({...watchList, [id]: title})
+  const toggleAddToWatchlist = async (movie, isAdded) => {
+    if (!isAdded) {
+      const result = await addToWatchlist({ id: movie.id })
+      if (result.status === 422) {
+        return setError(new Error("fail"));
+      } 
+      localStorage.setItem([movie.id], movie.title);
+      setWatchlist({ ...watchlist, [movie.id]: movie.title })
+    } 
+    else {
+      const result = await removeFromWatchlist({ id: movie.id })
+      if (result.status !== 200) {
+        return setError(new Error("fail"));
+        }
+      localStorage.removeItem(movie.id);
+      const newWatchlist = { ...watchlist };
+      delete newWatchlist[movie.id];
+      setWatchlist(newWatchlist);
+    } 
   }
-
-  function removeFromWatchList(id) {
-    delete watchList[id];
-  }
-
-  function toggleButtonContext(id) {
-    let isAdded = watchList[id] ? true : false;
-    return isAdded;
-  }
-
-  console.log('movies: ',movies);
-
+  
   useEffect(() => {
+    let retrievedWatchlist = {};
+    let ids = Object.keys(localStorage);
+    ids.forEach(id => {
+      let title = localStorage.getItem(id);
+      retrievedWatchlist = { ...retrievedWatchlist, [id]: title };
+    }); 
+    setWatchlist(retrievedWatchlist);
+
     getMedias()
       .then(
         (result) => {
@@ -44,29 +56,27 @@ export default function App() {
       )
   }, []);
   
- 
-
-  if (error) {
-    return <div>Error: {error.message}</div>
-  } else if(!isLoaded) {
-    return <div>Loading...</div>
-  } else {
-    return (
-      <>
-        <Header />
-        <main> 
-          <section className="movie-cards">
-            {movies.map(movie => (
-              <Movie key={movie.id} 
-                {...movie} 
-                addToWatchList={addToWatchList}
-                removeFromWatchList={removeFromWatchList}
-                toggleButtonContext={toggleButtonContext}
-              />
-            ))}
-          </section>
-        </main>
-      </>
+  return (
+    <>
+      <Header />
+      <main> 
+        {
+          error ?
+            <div>Error: {error.message}</div>
+          :
+            isLoaded ?
+              <section className="movie-cards">
+                {movies.map(movie => (
+                  <Movie key={movie.id} 
+                    {...movie} 
+                    toggleAddToWatchlist={toggleAddToWatchlist}
+                    isInWatchlist={!!watchlist[movie.id]}
+                  />
+                ))}
+              </section>
+            : <div className="loading">Loading...</div>
+        }
+      </main>
+    </>
     )
   }
-}

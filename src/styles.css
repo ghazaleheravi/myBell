@@ -22,14 +22,6 @@ header {
   margin: 30px 0 30px 0;
 }
 
-.movie-ul {
-  padding: 0;
-}
-
-.movie-list {
-  list-style: none;
-}
-
 .movie-image {
   width: 100%;
   height: auto;
@@ -42,10 +34,17 @@ header {
 }
 
 .add-remove-btn {
-  font-size: 18px;
+  font-size: 16px;
   border: none;
 }
 
 .add-remove-btn:hover {
   cursor: pointer;
+}
+
+.loading {
+  position: fixed;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%, -50%);
 }
